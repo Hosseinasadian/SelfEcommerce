@@ -1,0 +1,262 @@
+openapi: 3.0.0
+info:
+  title: 'Ecommerce Product'
+  description: "Products Documentation: You can mange products here."
+  termsOfService: 'http://swagger.io/terms/'
+  contact:
+    email: hosseinasadian442@gmail.com
+  license:
+    name: 'Apache 2.0'
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+  version: 1.0.0
+servers:
+  -
+    url: 'http://localhost:8000/api'
+    description: 'Ecommerce product documentation'
+paths:
+  /admin/product-group:
+    post:
+      tags:
+        - Product-Group
+      summary: 'create new product group'
+      operationId: store-product-group
+      requestBody:
+        $ref: '#/components/requestBodies/StoreProductGroup'
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGroupStore'
+        '422':
+          description: 'Validation Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '404':
+          description: 'Product Group not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - Product-Group
+      summary: 'product groups list'
+      operationId: product-groups-list
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGroupList'
+        '404':
+          description: 'Product Group not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /admin/product-group/{product-group}:
+    get:
+      tags:
+        - Product-Group
+      summary: 'Show product group details'
+      operationId: show-product-group
+      parameters:
+        - name: product-group
+          in: path
+          description: 'ID of product group'
+          example: 15
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGroupDetails'
+        '404':
+          description: 'Product Group not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+    put:
+      tags:
+        - Product-Group
+      summary: 'Update product group'
+      operationId: update-product-group
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateProductGroup'
+      parameters:
+        - name: product-group
+          in: path
+          description: 'ID of product group'
+          example: 15
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductGroupStore'
+        '404':
+          description: 'Product Group not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+components:
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          example: error message
+    ValidationErrorResponse:
+      allOf:
+        - $ref: '#/components/schemas/ErrorResponse'
+        - type: object
+          properties:
+            errors:
+              type: object
+              description: Validation errors List
+              example: {first_field:["error 1","error 2"],second_field: ["another error in second field"]}
+
+    ProductGroupItem:
+      title: 'Product Group Item'
+      type: object
+      properties:
+        id:
+          title: ID
+          description: ID of product group admin knows it
+          type: integer
+          example: 15
+        name:
+          title: Name
+          description: Name of product group
+          type: string
+          example: mobile
+        code:
+          title: Code
+          description: unique code of product group customers know it
+          type: string
+          example: FPl6Nmwr
+    ProductGroupStore:
+      title: 'Store Product Group'
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/ProductGroupItem'
+    ProductGroupList:
+      title: 'Product Groups List'
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductGroupItem'
+    ProductGroupDetails:
+      title: 'Product Group Details'
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              title: ID
+              description: ID of product group admin knows it
+              type: integer
+              example: 15
+            name:
+              title: Name
+              description: Name of product group
+              type: string
+              example: mobile
+            code:
+              title: Code
+              description: unique code of product group customers know it
+              type: string
+              example: FPl6Nmwr
+  requestBodies:
+    StoreProductGroup:
+      required: true
+      content:
+        application/json:
+          schema:
+            title: 'New Product Group'
+            required:
+              - name
+            properties:
+              name:
+                title: 'Product group name'
+                description: 'ex: mobile, t-shirt, ...'
+                type: string
+            type: object
+    UpdateProductGroup:
+      required: true
+      content:
+        application/json:
+          schema:
+            title: 'Update Product Group'
+            required:
+              - name
+            properties:
+              name:
+                title: 'Product group name'
+                description: 'ex: mobile, t-shirt, ...'
+                type: string
+            type: object
+  securitySchemes:
+    petstore_auth:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: 'http://petstore.swagger.io/oauth/dialog'
+          scopes:
+            'write:pets': 'modify pets in your account'
+            'read:pets': 'read your pets'
+    BearerAuth:
+      type: http
+      scheme: bearer
+tags:
+  -
+    name: Product-Group
+    description: 'Product groups like mobile or t-shirt'
+externalDocs:
+  description: 'Find out more about Swagger'
+  url: 'http://swagger.io'

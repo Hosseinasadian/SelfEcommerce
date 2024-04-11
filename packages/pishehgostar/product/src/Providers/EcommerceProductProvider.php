@@ -2,6 +2,8 @@
 namespace Pishehgostar\Product\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Pishehgostar\Product\Models\ProductGroup;
+use Pishehgostar\Product\Observers\ProductGroupObserver;
 
 class EcommerceProductProvider extends ServiceProvider
 {
@@ -18,6 +20,8 @@ class EcommerceProductProvider extends ServiceProvider
     public function boot(): void{
         $this->loadRoutesFrom(__DIR__ . '/../routes/routes.php');
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
+
+        ProductGroup::observe(ProductGroupObserver::class);
 
     }
 }
