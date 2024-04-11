@@ -3,7 +3,6 @@
 namespace Pishehgostar\Product\Controllers;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Pishehgostar\Product\Models\ProductGroup;
 use Pishehgostar\Product\Requests\Admin\ProductGroup\StoreRequest;
 use Pishehgostar\Product\Requests\Admin\ProductGroup\UpdateRequest;
