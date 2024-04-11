@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "da9b7a1dc1dd923105198c572cc7df8d",
+    "content-hash": "b515c23bd6b680c6842896fa81a09e89",
     "packages": [
         {
             "name": "brick/math",
@@ -2401,6 +2401,38 @@
                 }
             ],
             "time": "2023-11-12T21:59:55+00:00"
+        },
+        {
+            "name": "pishehgostar/product",
+            "version": "dev-dev",
+            "dist": {
+                "type": "path",
+                "url": "packages/pishehgostar/product",
+                "reference": "354348ab452269c3619bbecfe4fe1f112e226d27"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Pishehgostar\\Product\\Providers\\EcommerceProductProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pishehgostar\\Product\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "hossein",
+                    "email": "hosseinasadian442@gmail.com"
+                }
+            ],
+            "description": "Product Implementation Of Ecommerce Project",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "psr/clock",
@@ -8133,7 +8165,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "pishehgostar/product": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {

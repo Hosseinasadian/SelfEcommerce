@@ -1,0 +1,23 @@
+{
+    "name": "pishehgostar/product",
+    "description": "Product Implementation Of Ecommerce Project",
+    "autoload": {
+        "psr-4": {
+            "Pishehgostar\\Product\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Pishehgostar\\Product\\Providers\\EcommerceProductProvider"
+            ]
+        }
+    },
+    "authors": [
+        {
+            "name": "hossein",
+            "email": "hosseinasadian442@gmail.com"
+        }
+    ],
+    "require": {}
+}
