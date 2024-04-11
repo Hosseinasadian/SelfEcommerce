@@ -1,6 +1,6 @@
 <?php
 
-namespace Pishehgostar\Product\Controllers;
+namespace Pishehgostar\Product\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Pishehgostar\Product\Models\ProductGroup;

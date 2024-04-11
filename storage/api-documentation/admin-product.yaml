@@ -75,7 +75,7 @@ paths:
     get:
       tags:
         - Product-Group
-      summary: 'Show product group details'
+      summary: 'show product group details'
       operationId: show-product-group
       parameters:
         - name: product-group
@@ -107,7 +107,7 @@ paths:
     put:
       tags:
         - Product-Group
-      summary: 'Update product group'
+      summary: 'update product group'
       operationId: update-product-group
       requestBody:
         $ref: '#/components/requestBodies/UpdateProductGroup'
@@ -128,6 +128,131 @@ paths:
                 $ref: '#/components/schemas/ProductGroupStore'
         '404':
           description: 'Product Group not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+
+  /admin/group-variant:
+    post:
+      tags:
+        - Group-Variant
+      summary: 'create new group variant'
+      operationId: store-group-variant
+      requestBody:
+        $ref: '#/components/requestBodies/StoreGroupVariant'
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupVariantStore'
+        '422':
+          description: 'Validation Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '404':
+          description: 'Group variant not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - Group-Variant
+      summary: 'group variants list'
+      operationId: group-variants-list
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupVariantList'
+        '404':
+          description: 'Product Group not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /admin/group-variant/{group-variant}:
+    get:
+      tags:
+        - Group-Variant
+      summary: 'show group variant details'
+      operationId: show-group-variant
+      parameters:
+        - name: group-variant
+          in: path
+          description: 'ID of group variant'
+          example: 15
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupVariantDetails'
+        '404':
+          description: 'Product Group not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+    put:
+      tags:
+        - Group-Variant
+      summary: 'update group variant'
+      operationId: update-group-variant
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateGroupVariant'
+      parameters:
+        - name: group-variant
+          in: path
+          description: 'ID of group variant'
+          example: 15
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupVariantStore'
+        '404':
+          description: 'Group variant not found'
           content:
             application/json:
               schema:
@@ -212,6 +337,62 @@ components:
               description: unique code of product group customers know it
               type: string
               example: FPl6Nmwr
+
+    GroupVariantItem:
+      title: 'Group Variant Item'
+      type: object
+      properties:
+        id:
+          title: ID
+          description: ID of group variant admin knows it
+          type: integer
+          example: 15
+        name:
+          title: Name
+          description: Name of group variant
+          type: string
+          example: mobile
+        code:
+          title: Code
+          description: unique code of group variant customers know it
+          type: string
+          example: FPl6Nmwr
+    GroupVariantStore:
+      title: 'Store Group Variant'
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GroupVariantItem'
+    GroupVariantList:
+      title: 'Group Variant List'
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupVariantItem'
+    GroupVariantDetails:
+      title: 'Group Variant Details'
+      type: object
+      properties:
+        data:
+          type: object
+          properties:
+            id:
+              title: ID
+              description: ID of group variant admin knows it
+              type: integer
+              example: 15
+            name:
+              title: Name
+              description: Name of group variant
+              type: string
+              example: mobile
+            code:
+              title: Code
+              description: unique code of group variant customers know it
+              type: string
+              example: FPl6Nmwr
   requestBodies:
     StoreProductGroup:
       required: true
@@ -241,6 +422,35 @@ components:
                 description: 'ex: mobile, t-shirt, ...'
                 type: string
             type: object
+
+    StoreGroupVariant:
+      required: true
+      content:
+        application/json:
+          schema:
+            title: 'New Group Variant'
+            required:
+              - name
+            properties:
+              name:
+                title: 'Group variant name'
+                description: 'ex: color, size, ...'
+                type: string
+            type: object
+    UpdateGroupVariant:
+      required: true
+      content:
+        application/json:
+          schema:
+            title: 'Update Group Variant'
+            required:
+              - name
+            properties:
+              name:
+                title: 'Group variant name'
+                description: 'ex: color, size, ...'
+                type: string
+            type: object
   securitySchemes:
     petstore_auth:
       type: oauth2
@@ -257,6 +467,9 @@ tags:
   -
     name: Product-Group
     description: 'Product groups like mobile or t-shirt'
+  -
+    name: Group-Variant
+    description: 'Group variants like color or size'
 externalDocs:
   description: 'Find out more about Swagger'
   url: 'http://swagger.io'
