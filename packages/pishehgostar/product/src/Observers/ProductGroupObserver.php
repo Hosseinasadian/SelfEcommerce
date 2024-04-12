@@ -10,6 +10,6 @@ class ProductGroupObserver
 {
     public function creating(ProductGroup $productGroup): void
     {
-        $productGroup->code = Str::random(8);
+        $productGroup->code = Str::random(6);
     }
 }

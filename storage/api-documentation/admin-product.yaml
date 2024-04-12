@@ -103,7 +103,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
     put:
       tags:
         - Product-Group
@@ -126,6 +126,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProductGroupStore'
+        '422':
+          description: 'Validation Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
         '404':
           description: 'Product Group not found'
           content:
@@ -137,7 +143,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
 
   /admin/group-variant:
     post:
@@ -228,7 +234,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
     put:
       tags:
         - Group-Variant
@@ -251,6 +257,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GroupVariantStore'
+        '422':
+          description: 'Validation Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
         '404':
           description: 'Group variant not found'
           content:
@@ -262,8 +274,97 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ValidationErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
 
+  /admin/group-variant/{group-variant}/values:
+    post:
+      tags:
+        - Group-Variant
+      summary: 'add value to group variant'
+      operationId: group-variant-add-value
+      requestBody:
+        $ref: '#/components/requestBodies/GroupVariantAddValue'
+      parameters:
+        - name: group-variant
+          in: path
+          description: 'ID of group variant'
+          example: 15
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupVariantAddValue'
+        '422':
+          description: 'Validation Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '404':
+          description: 'Not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /admin/group-variant/{group-variant}/values/{group-variant-value}:
+    put:
+      tags:
+        - Group-Variant
+      summary: 'update group variant value'
+      operationId: update-group-variant-value
+      requestBody:
+        $ref: '#/components/requestBodies/UpdateGroupVariantValue'
+      parameters:
+        - name: group-variant
+          in: path
+          description: 'ID of group variant'
+          example: 15
+          required: true
+          schema:
+            type: integer
+        - name: group-variant-value
+          in: path
+          description: 'ID of group variant value'
+          example: 15
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Success Response'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupVariantAddValue'
+        '422':
+          description: 'Validation Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ValidationErrorResponse'
+        '404':
+          description: 'Not found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: 'Too Many Attempts'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     ErrorResponse:
@@ -351,7 +452,7 @@ components:
           title: Name
           description: Name of group variant
           type: string
-          example: mobile
+          example: color
         code:
           title: Code
           description: unique code of group variant customers know it
@@ -387,12 +488,40 @@ components:
               title: Name
               description: Name of group variant
               type: string
-              example: mobile
+              example: color
             code:
               title: Code
               description: unique code of group variant customers know it
               type: string
               example: FPl6Nmwr
+
+    GroupVariantValueItem:
+      title: 'Group Variant Value Item'
+      type: object
+      properties:
+        id:
+          title: ID
+          description: ID of group variant value admin knows it
+          type: integer
+          example: 15
+        name:
+          title: Name
+          description: Name of group variant value
+          type: string
+          example: blue
+        code:
+          title: Code
+          description: unique code of group variant value customers know it
+          type: string
+          example: FPl6Nmwr
+    GroupVariantAddValue:
+      title: 'Add Value To Group Variant'
+      type: object
+      properties:
+        data:
+          $ref: '#/components/schemas/GroupVariantValueItem'
+
+
   requestBodies:
     StoreProductGroup:
       required: true
@@ -436,6 +565,7 @@ components:
                 title: 'Group variant name'
                 description: 'ex: color, size, ...'
                 type: string
+                example: color
             type: object
     UpdateGroupVariant:
       required: true
@@ -451,6 +581,38 @@ components:
                 description: 'ex: color, size, ...'
                 type: string
             type: object
+
+    GroupVariantAddValue:
+      required: true
+      content:
+        application/json:
+          schema:
+            title: 'Add value to Group Variant'
+            required:
+              - name
+            properties:
+              name:
+                title: 'Group variant value name'
+                description: 'ex: blue, large, ...'
+                example: blue
+                type: string
+            type: object
+    UpdateGroupVariantValue:
+      required: true
+      content:
+        application/json:
+          schema:
+            title: 'Update Group Variant Value'
+            required:
+              - name
+            properties:
+              name:
+                title: 'Group variant value name'
+                description: 'ex: blue, large, ...'
+                example: blue
+                type: string
+            type: object
+
   securitySchemes:
     petstore_auth:
       type: oauth2

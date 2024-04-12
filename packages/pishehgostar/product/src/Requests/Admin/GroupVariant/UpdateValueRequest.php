@@ -3,8 +3,9 @@
 namespace Pishehgostar\Product\Requests\Admin\GroupVariant;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreRequest extends FormRequest
+class UpdateValueRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,8 +22,10 @@ class StoreRequest extends FormRequest
      */
     public function rules(): array
     {
+        $groupVariantId = $this->route('group_variant')->id;
+        $groupVariantValueId = $this->route('value')->id;
         return [
-            'name'=>'required|unique:group_variants',
+            'name'=>['required',Rule::unique('group_variant_values')->ignore($groupVariantValueId)->where('group_variant_id',$groupVariantId)],
         ];
     }
 }

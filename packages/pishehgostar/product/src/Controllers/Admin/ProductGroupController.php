@@ -45,7 +45,7 @@ class ProductGroupController extends Controller
     {
         $data = $request->validated();
         $productGroup->update($data);
-        return new DetailsResource($productGroup);
+        return new ListResource($productGroup);
     }
 
     /**
