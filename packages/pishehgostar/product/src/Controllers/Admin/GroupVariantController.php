@@ -20,8 +20,8 @@ class GroupVariantController extends Controller
      */
     public function index()
     {
-        $group_variants = GroupVariant::query()->get();
-        return ListResource::collection($group_variants);
+        $groupVariant = GroupVariant::query()->get();
+        return ListResource::collection($groupVariant);
     }
 
     /**
@@ -30,8 +30,8 @@ class GroupVariantController extends Controller
     public function store(StoreRequest $request)
     {
         $data = $request->validated();
-        $group_variant = GroupVariant::query()->create($data);
-        return new ListResource($group_variant);
+        $groupVariant = GroupVariant::query()->create($data);
+        return new ListResource($groupVariant);
     }
 
     /**
@@ -39,8 +39,8 @@ class GroupVariantController extends Controller
      */
     public function show(GroupVariant $groupVariant)
     {
-        return new DetailsResource($groupVariant);
-
+        $groupVariant->load('values');
+        return new ListResource($groupVariant);
     }
 
     /**
@@ -61,17 +61,19 @@ class GroupVariantController extends Controller
         // todo add group variant destroy method implementation
     }
 
-    public function addValue(AddValueRequest $request,GroupVariant $groupVariant)
+    public function addValue(AddValueRequest $request, GroupVariant $groupVariant)
     {
         $data = $request->validated();
         $groupVariant->values()->create($data);
-        return $request->validated();
+        $groupVariant->load('values');
+        return new DetailsResource($groupVariant);
     }
 
-    public function updateValue(UpdateValueRequest $request,GroupVariant $groupVariant,GroupVariantValue $value)
+    public function updateValue(UpdateValueRequest $request, GroupVariant $groupVariant, GroupVariantValue $value)
     {
         $data = $request->validated();
         $value->update($data);
-        return $request->validated();
+        $groupVariant->load('values');
+        return new DetailsResource($groupVariant);
     }
 }

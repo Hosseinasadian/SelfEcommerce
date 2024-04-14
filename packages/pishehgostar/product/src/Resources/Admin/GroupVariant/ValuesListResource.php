@@ -5,7 +5,7 @@ namespace Pishehgostar\Product\Resources\Admin\GroupVariant;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class DetailsResource extends JsonResource
+class ValuesListResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,7 +18,6 @@ class DetailsResource extends JsonResource
             'id'=>$this->id,
             'name'=>$this->name,
             'code'=>$this->code,
-            'values'=>ValuesListResource::collection($this->values)
         ];
     }
 }

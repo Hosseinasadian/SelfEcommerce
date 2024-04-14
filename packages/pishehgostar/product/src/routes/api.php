@@ -14,4 +14,5 @@ Route::group([
         Route::put('group-variant/{group_variant}/values/{value}',[GroupVariantController::class,'updateValue']);
     });
     Route::apiResource('group-variant',GroupVariantController::class);
+
 });
